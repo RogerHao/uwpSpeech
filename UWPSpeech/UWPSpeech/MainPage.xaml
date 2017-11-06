@@ -9,9 +9,19 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel>
+            <TextBlock Text="Say Command" FontSize="18"/>
             <TextBox Name="textInput" Height="100" TextWrapping="Wrap"/>
-            <Button Content="Start" Click="Button_Click" HorizontalAlignment="Stretch"/>
-            <TextBlock Name="tbDisplay" FontSize="16" Margin="3,13,0,0" Foreground="Yellow"/>
+            <Button Content="Start Recognize" Click="Button_Click_Recognize" HorizontalAlignment="Stretch"/>
+            <Button Content="Start Speech" Click="Button_Click_Speech" HorizontalAlignment="Stretch"/>
+            <ListBox Name="lb" HorizontalAlignment="Center">
+                <x:String>开始</x:String>
+                <x:String>设置</x:String>
+                <x:String>介绍</x:String>
+                <x:String>退出</x:String>
+                <x:String>返回</x:String>
+            </ListBox>
+            <TextBlock x:Name="tbDisplay" FontSize="16" Margin="3,13,0,0" Foreground="Yellow" Height="233"/>
+            <MediaElement Name="Media" AutoPlay="True" Volume="1.0"/>
         </StackPanel>
     </Grid>
 </Page>

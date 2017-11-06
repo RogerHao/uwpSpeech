@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Media.SpeechRecognition;
+using Windows.Media.SpeechSynthesis;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -28,14 +29,20 @@ namespace UWPSpeech
             this.InitializeComponent();
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click_Recognize(object sender, RoutedEventArgs e)
         {
             Button button = sender as Button;
             button.IsEnabled = false;
+
+            String[] array = {"开始", "返回", "退出", "设置", "介绍"};
+            SpeechRecognitionListConstraint speechRecognitionListConstraint =
+                new SpeechRecognitionListConstraint(array);
+
             using (SpeechRecognizer recognizer = new SpeechRecognizer())
             {
                 try
                 {
+                    recognizer.Constraints.Add(speechRecognitionListConstraint);
                     SpeechRecognitionCompilationResult compilationResult = await recognizer.CompileConstraintsAsync();
                     if (compilationResult.Status == SpeechRecognitionResultStatus.Success)
                     {
@@ -44,6 +51,7 @@ namespace UWPSpeech
                         {
                             tbDisplay.Text = "finished";
                             textInput.Text = speechRecognitionResult.Text;
+                            this.lb.SelectedItem = speechRecognitionResult.Text;
                         }
                     }
                 }
@@ -53,6 +61,19 @@ namespace UWPSpeech
                     //throw;
                 }
             }
+            button.IsEnabled = true;
+        }
+
+        private async void Button_Click_Speech(object sender, RoutedEventArgs e)
+        {
+            //            throw new NotImplementedException();
+            if (textInput.Text.Length == 0) return;
+            Button button = sender as Button;
+            button.IsEnabled = false;
+            SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer();
+            SpeechSynthesisStream speechSynthesisStream =
+                await speechSynthesizer.SynthesizeTextToStreamAsync(textInput.Text);
+            Media.SetSource(speechSynthesisStream, speechSynthesisStream.ContentType);
             button.IsEnabled = true;
         }
 
